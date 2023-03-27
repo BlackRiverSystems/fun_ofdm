@@ -65,6 +65,8 @@ namespace fun
             }
             break;
         }
+
+        return {};
     }
 
     /*!
@@ -120,7 +122,7 @@ namespace fun
                 break;
             }
         }
+
+        return {};
     }
-
 }
-

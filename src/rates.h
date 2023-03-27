@@ -15,7 +15,7 @@
 #include <string>
 
 namespace fun
-{    
+{
 
     /*! \brief Valid rate field values */
     static std::vector<unsigned char> VALID_RATES = {0xD, 0xE, 0xF, 0x5, 0x6, 0x7, 0x9, 0xA, 0xB, 0x1, 0x3};
@@ -54,9 +54,9 @@ namespace fun
         unsigned char rate_field; //!< SIGNAL rate field
         int cbps;                 //!< Coded bits per symbol
         int dbps;                 //!< Data bits per symbol
-        int bpsc;                 //!< Bits per subcarrier
         Rate rate;                //!< Rate enum value
         double rel_rate;          //!< Relative coding rate (relative to 1/2)
+        int bpsc;                 //!< Bits per subcarrier
         std::string name;         //!< Display name
 
         /*!
@@ -66,20 +66,17 @@ namespace fun
          * \param _rate the PHY Rate for which the corresponding parameters are desired
          */
         RateParams(Rate _rate)
+            // 1/2 BPSK
+            : rate_field(0xD)
+            , cbps(48)
+            , dbps(24)
+            , rate(RATE_1_2_BPSK)
+            , rel_rate(1.0)
+            , bpsc(1)
+            , name("1/2 BPSK")
         {
             switch(_rate)
             {
-                // 1/2 BPSK
-                case RATE_1_2_BPSK:
-                    rate_field = 0xD;
-                    cbps = 48;
-                    dbps = 24;
-                    rate = RATE_1_2_BPSK;
-                    rel_rate = 1.0;
-                    bpsc = 1;
-                    name = "1/2 BPSK";
-                    break;
-
                 // 2/3 BPSK
                 case RATE_2_3_BPSK:
                     rate_field = 0xE;
@@ -246,6 +243,8 @@ namespace fun
                     assert(false);
                     break;
             }
+
+            return RateParams(RATE_1_2_BPSK);
         }
     };
 }
