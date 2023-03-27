@@ -72,6 +72,15 @@ namespace fun
         return ppdu_samples;
     }
 
+    int ReverseBits(int num_bits, int input)
+    {
+        int output = 0;
+        while (num_bits-- > 0) {
+            output = (output << 1) + (input & 1);
+            input >>= 1;
+        }
+        return output;
+    }
 
     /*!
      * Uses the rate_params to build the header. Note the header is NOT scrambled.
@@ -83,7 +92,7 @@ namespace fun
         // Build the header from the rate field and length
         RateParams rate_params = RateParams(header.rate);
         unsigned int header_field = 0;
-        header_field = ((rate_params.rate_field & 0xF) << 13) | (header.length & 0xFFF);
+        header_field = (ReverseBits(4, rate_params.rate_field) & 0xF) | ((header.length & 0xFFF) << 5);
 
         // Set the parity bit and align
         if(parity(header_field) == 1) header_field |= 131072;
@@ -91,7 +100,7 @@ namespace fun
 
         // Convert the header to a unsigned char array
         unsigned char header_bytes[4];
-        unsigned int h = htonl(header_field) >> 8;
+        unsigned int h = htole32(header_field);
         memcpy(header_bytes, &h, 3);
 
         // Convolutionally encode the header
