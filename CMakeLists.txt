@@ -77,7 +77,7 @@ endif()
 # Find UHD
 find_package(UHD)
 if(NOT UHD_FOUND)
-    message(FATAL_ERROR "UHD required to compile fun_ofdm")
+    message("UHD not found")
 else()
     message("Found UHD in ${UHD_DIR} lib in ${UHD_LIBRARY_DIR}")
 endif()
@@ -116,5 +116,9 @@ include_directories("/opt/local/include")
 # Add subdirectories
 ########################################################################
 add_subdirectory(src)
+
+if(UHD_FOUND)
+
 add_subdirectory(examples)
 
+endif()

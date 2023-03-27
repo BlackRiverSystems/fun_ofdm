@@ -60,13 +60,18 @@ list(APPEND sources
     receiver_chain.cpp
     symbol_mapper.cpp
     timing_sync.cpp
-    usrp.cpp
     viterbi.cpp
+)
 
+if(UHD_FOUND)
+
+list(APPEND sources
+    usrp.cpp
     transmitter.cpp
     receiver.cpp
-
 )
+
+endif()
 
 
 ########################################################################
@@ -81,8 +86,15 @@ list(APPEND sources
 #	boost
 #	pthread (this one is a bit strange)
 ########################################################################
+
+if(UHD_FOUND)
+
+target_link_libraries(fun_ofdm ${UHD_LIBRARIES})
+
+endif()
+
 # target_link_libraries(fun_ofdm uhd fftw3 pthread)  # Equivalent to below
- target_link_libraries(fun_ofdm ${UHD_LIBRARIES} ${FFTW3_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}) #equivalent to line above but better style?
+target_link_libraries(fun_ofdm ${FFTW3_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT}) #equivalent to line above but better style?
 
 ########################################################################
 # Install Rules
