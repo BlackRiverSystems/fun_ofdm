@@ -165,7 +165,7 @@ namespace fun
         std::vector<unsigned char> data_punctured = puncturer::puncture(data_encoded, header.rate);
 
         // Interleave the data
-        std::vector<unsigned char> data_interleaved = interleaver::interleave(data_punctured);
+        std::vector<unsigned char> data_interleaved = interleaver::interleave(rate_params.cbps, rate_params.bpsc, data_punctured);
 
         // Modulated the data
         std::vector<std::complex<double> > data_modulated = modulator::modulate(data_interleaved, header.rate);

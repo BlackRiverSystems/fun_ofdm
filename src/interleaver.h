@@ -38,6 +38,7 @@ namespace fun
          * \return Vector of interleaved data
          */
         static std::vector<unsigned char> interleave(std::vector<unsigned char> data);
+        static std::vector<unsigned char> interleave(int ncarriers, int nbits, std::vector<unsigned char> data);
 
         /*!
          * \brief deinterleaves the data

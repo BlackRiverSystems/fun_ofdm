@@ -11,17 +11,22 @@
 
 namespace fun
 {
-    // Interleave some data
-    std::vector<unsigned char> interleaver::interleave(std::vector<unsigned char> data)
+    std::vector<unsigned char> interleaver::interleave(int ncarriers, int nbits, std::vector<unsigned char> data)
     {
         std::vector<unsigned int> interleave_map;
-        BitInterleave(48, 1).fill(interleave_map, false);
+        BitInterleave(48, nbits).fill(interleave_map, false);
 
         std::vector<unsigned char> data_interleaved(data.size());
         for(int x = 0; x < data.size(); x += interleave_map.size())
             for(int y = 0; y < interleave_map.size(); y++)
                 data_interleaved[x + interleave_map[y]] = data[x + y];
         return data_interleaved;
+    }
+
+    // Interleave some data
+    std::vector<unsigned char> interleaver::interleave(std::vector<unsigned char> data)
+    {
+        return interleave(48, 1, data);
     }
 
     // Deinterleave some data
