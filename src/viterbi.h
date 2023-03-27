@@ -22,7 +22,7 @@
 
 #define K 7
 #define RATE 2
-#define POLYS { 121, 91 }
+#define POLYS {109, 79} // Reverse of { 121, 91 }
 #define NUMSTATES 64
 #define DECISIONTYPE unsigned char
 #define DECISIONTYPE_BITSIZE 8

@@ -49,7 +49,7 @@ namespace fun
 
             int b = data[i/8];
             int j = i % 8;
-            int bit = (b >> (7 - j)) & 1;
+            int bit = (b >> j) & 1;
 
             sr = (sr << 1) | bit;
             for(int k = 0; k < RATE; k++)
