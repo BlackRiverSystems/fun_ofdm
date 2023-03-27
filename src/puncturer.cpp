@@ -42,7 +42,7 @@ namespace fun
                 {
                     punc_buff_34[index++] = data[x + 0];
                     punc_buff_34[index++] = data[x + 1];
-                    punc_buff_34[index++] = data[x + 3];
+                    punc_buff_34[index++] = data[x + 2];
                     punc_buff_34[index++] = data[x + 5];
                 }
                 return punc_buff_34;
@@ -58,8 +58,8 @@ namespace fun
                 for(int x = 0; x < data.size(); x += 4)
                 {
                     punc_buff_23[index++] = data[x + 0];
+                    punc_buff_23[index++] = data[x + 1];
                     punc_buff_23[index++] = data[x + 2];
-                    punc_buff_23[index++] = data[x + 3];
                 }
                 return punc_buff_23;
             }
