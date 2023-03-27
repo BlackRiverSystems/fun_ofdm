@@ -96,7 +96,6 @@ namespace fun
 
         // Set the parity bit and align
         if(parity(header_field) == 1) header_field |= 131072;
-        header_field <<= 6;
 
         // Convert the header to a unsigned char array
         unsigned char header_bytes[4];
