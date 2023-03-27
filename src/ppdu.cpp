@@ -34,9 +34,10 @@ namespace fun
      */
     ppdu::ppdu(Rate rate, int length)
     {
+        length += 4 /* CRC */;
         RateParams rate_params = RateParams(rate);
         int num_symbols = std::ceil(
-                double((16 /* service */ + 8 * (length + 4 /* CRC */) + 6 /* tail */)) /
+                double((16 /* service */ + 8 * (length) + 6 /* tail */)) /
                 double(rate_params.dbps));
         header = plcp_header(rate, length, num_symbols);
         payload.reserve(MAX_FRAME_SIZE);
@@ -50,9 +51,9 @@ namespace fun
         payload(payload)
     {
         RateParams rate_params = RateParams(rate);
-        int length = payload.size();
+        int length = payload.size() + 4 /* CRC */;
         int num_symbols = std::ceil(
-                double((16 /* service */ + 8 * (length + 4 /* CRC */) + 6 /* tail */)) /
+                double((16 /* service */ + 8 * (length) + 6 /* tail */)) /
                 double(rate_params.dbps));
 
         header = plcp_header(rate, length, num_symbols);
@@ -140,13 +141,13 @@ namespace fun
 
         // Calcualate and append the CRC
         boost::crc_32_type crc;
-        crc.process_bytes(&data[0], 2 + payload.size());
+        crc.process_bytes(&data[2], payload.size());
         unsigned int calculated_crc = crc.checksum();
         memcpy(&data[2 + payload.size()], &calculated_crc, 4);
 
         // Scramble the data
         std::vector<unsigned char> scrambled(num_data_bytes+1, 0);
-        int state = 93, feedback = 0;
+        int state = data[0], feedback = 0;
         for(int x = 0; x < num_data_bytes; x++)
         {
            feedback = (!!(state & 64)) ^ (!!(state & 8));
@@ -183,7 +184,7 @@ namespace fun
         // Deinterleave the header
         std::vector<unsigned char> deinterleaved = interleaver::deinterleave(demodulated);
 
-        // Convolutionally decode the header        
+        // Convolutionally decode the header
         std::vector<unsigned char> header_bytes(4);
         viterbi v;
         v.conv_decode(deinterleaved.data(), header_bytes.data(), 18 /* header is always 18 data bits */);
@@ -303,4 +304,3 @@ namespace fun
     }
 
 }
-
